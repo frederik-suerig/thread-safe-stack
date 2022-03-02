@@ -54,3 +54,40 @@ func TestPopStack(t *testing.T) {
 		}
 	})
 }
+
+func TestIsEmpty(t *testing.T) {
+	t.Run("Return true for an empty stack", func(t *testing.T) {
+		s := StringStack{Value: []string{}}
+
+		emt := s.isEmpty()
+
+		if !emt {
+			t.Errorf("isEmpty() returnd False when it should return True")
+		}
+	})
+
+	t.Run("Return false for an non-empty stack", func(t *testing.T) {
+		s := StringStack{Value: []string{}}
+
+		s.push("Peter")
+
+		emt := s.isEmpty()
+
+		if emt {
+			t.Errorf("isEmpty() returnd True when it should return False")
+		}
+	})
+
+	t.Run("Return True after all elements where poped", func(t *testing.T) {
+		s := StringStack{Value: []string{}}
+
+		s.push("Peter")
+		s.pop()
+
+		emt := s.isEmpty()
+
+		if !emt {
+			t.Errorf("isEmpty() returnd False when it should return True")
+		}
+	})
+}
