@@ -2,6 +2,8 @@ package threadsafestack
 
 import (
 	"errors"
+	"fmt"
+	"sync"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -13,10 +15,31 @@ func TestPushStack(t *testing.T) {
 
 		s.push("Peter")
 
-		want := StringStack{Value: []string{"Peter"}}
+		want := []string{"Peter"}
 
-		if !cmp.Equal(s, want) {
-			t.Errorf(cmp.Diff(s, want))
+		if !cmp.Equal(s.Value, want) {
+			t.Errorf(cmp.Diff(s.Value, want))
+		}
+	})
+
+	t.Run("Runs safe concurrently", func(t *testing.T) {
+		wantedCount := 1000
+		s := newStringStack()
+
+		var wg sync.WaitGroup
+		wg.Add(wantedCount)
+
+		for i := 0; i < wantedCount; i++ {
+			go func(i int) {
+				defer wg.Done()
+				s.push(fmt.Sprintf("GoRoutine %d", i))
+			}(i)
+		}
+
+		wg.Wait()
+
+		if len(s.Value) != 1000 {
+			t.Errorf("Not all goroutine completed")
 		}
 	})
 }
@@ -51,6 +74,27 @@ func TestPopStack(t *testing.T) {
 
 		if err.Error() != want.Error() {
 			t.Errorf(cmp.Diff(err.Error(), want.Error()))
+		}
+	})
+
+	t.Run("Runs safe concurrently", func(t *testing.T) {
+		wantedCount := 1000
+		s := newFilledStringStack(wantedCount)
+
+		var wg sync.WaitGroup
+		wg.Add(wantedCount)
+
+		for i := 0; i < wantedCount; i++ {
+			go func(i int) {
+				defer wg.Done()
+				s.pop()
+			}(i)
+		}
+
+		wg.Wait()
+
+		if len(s.Value) != 0 {
+			t.Errorf("Not all goroutine completed")
 		}
 	})
 }
@@ -90,4 +134,14 @@ func TestIsEmpty(t *testing.T) {
 			t.Errorf("isEmpty() returnd False when it should return True")
 		}
 	})
+}
+
+func newFilledStringStack(size int) StringStack {
+	s := newStringStack()
+
+	for i := 0; i < size; i++ {
+		s.push(fmt.Sprintf("GoRoutine %d", i))
+	}
+
+	return s
 }
