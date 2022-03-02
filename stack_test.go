@@ -7,7 +7,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
-func TestStack(t *testing.T) {
+func TestPushStack(t *testing.T) {
 	t.Run("Push to stack", func(t *testing.T) {
 		s := StringStack{Value: make([]string, 0)}
 
@@ -19,7 +19,9 @@ func TestStack(t *testing.T) {
 			t.Errorf(cmp.Diff(s, want))
 		}
 	})
+}
 
+func TestPopStack(t *testing.T) {
 	t.Run("Pop the last element from the stack", func(t *testing.T) {
 		s := StringStack{}
 
