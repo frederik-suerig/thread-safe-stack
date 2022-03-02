@@ -1,6 +1,7 @@
 package threadsafestack
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -34,6 +35,20 @@ func TestStack(t *testing.T) {
 		if !cmp.Equal(got, want) {
 			t.Errorf(cmp.Diff(got, want))
 		}
+	})
 
+	t.Run("Return error on pop if stack is empty", func(t *testing.T) {
+		s := StringStack{}
+
+		_, err := s.pop()
+		want := errors.New(ErrEmptyStack)
+
+		if err == nil {
+			t.Error("Received no error when it should return one")
+		}
+
+		if err.Error() != want.Error() {
+			t.Errorf(cmp.Diff(err.Error(), want.Error()))
+		}
 	})
 }
