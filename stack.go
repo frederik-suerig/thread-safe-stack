@@ -25,3 +25,7 @@ func (s *StringStack) pop() (string, error) {
 	return lastElement, nil
 
 }
+
+func (s *StringStack) isEmpty() bool {
+	return len(s.Value) == 0
+}
