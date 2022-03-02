@@ -6,5 +6,5 @@ Implementing a thread-safe stack data structure in golang
   - [x] `push`
   - [x] `pop`
   - [x] `empty`
-- [ ] Ensure stack is thread safe
-  - [ ] add a mutex
+- [x] Ensure stack is thread safe
+  - [x] add a mutex

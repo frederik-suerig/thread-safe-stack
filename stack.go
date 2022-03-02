@@ -1,10 +1,14 @@
 package threadsafestack
 
-import "errors"
+import (
+	"errors"
+	"sync"
+)
 
 const ErrEmptyStack string = "stack is empty"
 
 type StringStack struct {
+	mu    sync.Mutex
 	Value []string
 }
 
@@ -13,10 +17,14 @@ func newStringStack() StringStack {
 }
 
 func (s *StringStack) push(value string) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	s.Value = append(s.Value, value)
 }
 
 func (s *StringStack) pop() (string, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	if len(s.Value) == 0 {
 		return "", errors.New(ErrEmptyStack)
 	}
