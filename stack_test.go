@@ -9,7 +9,7 @@ import (
 
 func TestPushStack(t *testing.T) {
 	t.Run("Push to stack", func(t *testing.T) {
-		s := StringStack{Value: make([]string, 0)}
+		s := newStringStack()
 
 		s.push("Peter")
 
@@ -23,7 +23,7 @@ func TestPushStack(t *testing.T) {
 
 func TestPopStack(t *testing.T) {
 	t.Run("Pop the last element from the stack", func(t *testing.T) {
-		s := StringStack{}
+		s := newStringStack()
 
 		s.push("Peter")
 
@@ -40,7 +40,7 @@ func TestPopStack(t *testing.T) {
 	})
 
 	t.Run("Return error on pop if stack is empty", func(t *testing.T) {
-		s := StringStack{}
+		s := newStringStack()
 
 		_, err := s.pop()
 		want := errors.New(ErrEmptyStack)
@@ -57,7 +57,7 @@ func TestPopStack(t *testing.T) {
 
 func TestIsEmpty(t *testing.T) {
 	t.Run("Return true for an empty stack", func(t *testing.T) {
-		s := StringStack{Value: []string{}}
+		s := newStringStack()
 
 		emt := s.isEmpty()
 
@@ -67,7 +67,7 @@ func TestIsEmpty(t *testing.T) {
 	})
 
 	t.Run("Return false for an non-empty stack", func(t *testing.T) {
-		s := StringStack{Value: []string{}}
+		s := newStringStack()
 
 		s.push("Peter")
 
@@ -79,7 +79,7 @@ func TestIsEmpty(t *testing.T) {
 	})
 
 	t.Run("Return True after all elements where poped", func(t *testing.T) {
-		s := StringStack{Value: []string{}}
+		s := newStringStack()
 
 		s.push("Peter")
 		s.pop()

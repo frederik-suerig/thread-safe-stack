@@ -8,6 +8,10 @@ type StringStack struct {
 	Value []string
 }
 
+func newStringStack() StringStack {
+	return StringStack{Value: []string{}}
+}
+
 func (s *StringStack) push(value string) {
 	s.Value = append(s.Value, value)
 }
