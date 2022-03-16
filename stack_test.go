@@ -136,7 +136,42 @@ func TestIsEmpty(t *testing.T) {
 	})
 }
 
-func newFilledStringStack(size int) StringStack {
+func TestGenerics(t *testing.T) {
+	t.Run("Allow initialization of int stack", func(t *testing.T) {
+		s := Stack[int]{}
+
+		s.push(13)
+
+		want := []int{13}
+
+		if !cmp.Equal(s.Value, want) {
+			t.Errorf(cmp.Diff(s.Value, want))
+		}
+	})
+
+	t.Run("Runs safe concurrently", func(t *testing.T) {
+		wantedCount := 1000
+		s := Stack[int]{}
+
+		var wg sync.WaitGroup
+		wg.Add(wantedCount)
+
+		for i := 0; i < wantedCount; i++ {
+			go func(i int) {
+				defer wg.Done()
+				s.push(i)
+			}(i)
+		}
+
+		wg.Wait()
+
+		if len(s.Value) != wantedCount {
+			t.Errorf("Not all goroutine completed")
+		}
+	})
+}
+
+func newFilledStringStack(size int) Stack[string] {
 	s := newStringStack()
 
 	for i := 0; i < size; i++ {

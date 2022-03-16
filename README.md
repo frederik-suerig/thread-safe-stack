@@ -8,4 +8,4 @@ Implementing a thread-safe stack data structure in golang
   - [x] `empty`
 - [x] Ensure stack is thread safe
   - [x] add a mutex
-- [ ] Add generics (when go 1.18 is launched) 
+- [x] Add generics (when go 1.18 is launched) 

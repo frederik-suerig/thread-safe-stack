@@ -7,26 +7,27 @@ import (
 
 const ErrEmptyStack string = "stack is empty"
 
-type StringStack struct {
+type Stack[T any] struct {
 	mu    sync.Mutex
-	Value []string
+	Value []T
 }
 
-func newStringStack() StringStack {
-	return StringStack{Value: []string{}}
+func newStringStack() Stack[string] {
+	return Stack[string]{}
 }
 
-func (s *StringStack) push(value string) {
+func (s *Stack[T]) push(value T) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.Value = append(s.Value, value)
 }
 
-func (s *StringStack) pop() (string, error) {
+func (s *Stack[T]) pop() (T, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if len(s.Value) == 0 {
-		return "", errors.New(ErrEmptyStack)
+		var empty T
+		return empty, errors.New(ErrEmptyStack)
 	}
 
 	lastIndex := len(s.Value) - 1
@@ -38,6 +39,6 @@ func (s *StringStack) pop() (string, error) {
 
 }
 
-func (s *StringStack) isEmpty() bool {
+func (s *Stack[T]) isEmpty() bool {
 	return len(s.Value) == 0
 }
